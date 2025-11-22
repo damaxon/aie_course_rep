@@ -55,3 +55,9 @@ logs/
 *.tmp
 *.bak
 *.old
+
+# Сырые данные
+project/data/raw/
+
+# Конфиг с данными API сайта kaggle
+project/configs/kaggle.json
