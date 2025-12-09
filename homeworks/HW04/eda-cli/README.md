@@ -366,6 +366,7 @@ S04/
         viz.py               # визуализации
         cli.py               # CLI (overview/report)
         api.py               # HTTP-сервис (FastAPI)
+        logger.py            # самописный logger для eda-cli
     tests/
       test_core.py           # тесты ядра
     data/
