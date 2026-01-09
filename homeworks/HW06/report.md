@@ -38,13 +38,76 @@ target
 ## 4. Results
 
 - Таблица финальных метрик на test по всем моделям
-accuracy	f1	roc_auc	model
-5	0.98160	0.776699	0.906037	Stacking
-4	0.97984	0.742857	0.904646	HistGradientBoosting
-3	0.97024	0.567442	0.903547	RandomForest
-1	0.96256	0.409091	0.840041	LogReg(scaled)
-2	0.96848	0.588727	0.827972	DecisionTree
-0	0.95088	0.000000	0.500000	Dummy(most_frequent)
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>accuracy</th>
+      <th>f1</th>
+      <th>roc_auc</th>
+      <th>model</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>5</th>
+      <td>0.98160</td>
+      <td>0.776699</td>
+      <td>0.906037</td>
+      <td>Stacking</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.97984</td>
+      <td>0.742857</td>
+      <td>0.904646</td>
+      <td>HistGradientBoosting</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.97024</td>
+      <td>0.567442</td>
+      <td>0.903547</td>
+      <td>RandomForest</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.96256</td>
+      <td>0.409091</td>
+      <td>0.840041</td>
+      <td>LogReg(scaled)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.96848</td>
+      <td>0.588727</td>
+      <td>0.827972</td>
+      <td>DecisionTree</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.95088</td>
+      <td>0.000000</td>
+      <td>0.500000</td>
+      <td>Dummy(most_frequent)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 - Лучшая модель вышла Stacking (по всем метрикам), так как с таким дисбалансом классов она показала лучшие результаты по метрикам, которые довольно устойчивы к дисбалансу
 
