@@ -1,40 +1,41 @@
 {
-  "results": [
-    {
+  "metadata": {
+    "experiment_name": "HW06 - Деревья решений и ансамбли",
+    "dataset": "S06-hw-dataset-04.csv",
+    "test_size": 0.25,
+    "random_state": 42,
+    "time": "2026-01-27T17:22:06.266312"
+  },
+  "metrics": {
+    "Stacking": {
       "accuracy": 0.9816,
       "f1": 0.7766990291262136,
-      "roc_auc": 0.9060373219855731,
-      "model": "Stacking"
+      "roc_auc": 0.9060373219855731
     },
-    {
+    "HistGradientBoosting": {
       "accuracy": 0.97984,
       "f1": 0.7428571428571429,
-      "roc_auc": 0.9046457086074494,
-      "model": "HistGradientBoosting"
+      "roc_auc": 0.9046457086074494
     },
-    {
+    "RandomForest": {
       "accuracy": 0.97024,
       "f1": 0.5674418604651162,
-      "roc_auc": 0.903546777995737,
-      "model": "RandomForest"
+      "roc_auc": 0.903546777995737
     },
-    {
+    "LogReg(scaled)": {
       "accuracy": 0.96256,
       "f1": 0.4090909090909091,
-      "roc_auc": 0.8400411948253248,
-      "model": "LogReg(scaled)"
+      "roc_auc": 0.8400411948253248
     },
-    {
+    "DecisionTree": {
       "accuracy": 0.96848,
       "f1": 0.5887265135699373,
-      "roc_auc": 0.8279721414238741,
-      "model": "DecisionTree"
+      "roc_auc": 0.8279721414238741
     },
-    {
+    "Dummy(most_frequent)": {
       "accuracy": 0.95088,
       "f1": 0.0,
-      "roc_auc": 0.5,
-      "model": "Dummy(most_frequent)"
+      "roc_auc": 0.5
     }
-  ]
+  }
 }
