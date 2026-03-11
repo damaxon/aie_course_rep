@@ -1,0 +1,31 @@
+{
+    "model": {
+        "arhitecture": "MLP",
+        "activation": "relu",
+        "hidden_dims": [
+            256,
+            128
+        ],
+        "dropout_p": 0.0,
+        "use_batchnorm": true
+    },
+    "training": {
+        "optimizer": "Adam",
+        "lr": 0.001,
+        "batch_size": 256,
+        "epochs": 19,
+        "loss_function": "CrossEntropyLoss",
+        "early_stopping": {
+            "patience": 4,
+            "min_delta": 0.0005
+        }
+    },
+    "dataset": "EMNIST",
+    "metrics": {
+        "best_val_accuracy": 0.8447916666666667,
+        "best_val_loss": 0.5019468744595845,
+        "test_accuracy": 0.8457936177382598,
+        "test_loss": 0.4856411822744318
+    },
+    "seed": 42
+}
