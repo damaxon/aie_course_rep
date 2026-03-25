@@ -1,0 +1,12 @@
+{
+    "model": "C4 | ResNet18 with Weights IMAGENET1K_V1",
+    "dataset": "CIFAR100",
+    "transforms": "Resize,RandomResizedCrop,RandomHorizontalFlip,ToTensor,Normalize",
+    "seed": 42,
+    "fast_mode": false,
+    "epochs_trained": 12,
+    "optimizer": "Adam",
+    "lr": 0.001,
+    "best_val_accuracy": 0.4118,
+    "test_accuracy": 0.2403
+}

@@ -1,0 +1,7 @@
+experiment_id,task,dataset,seed,model_summary,optimizer,lr,epochs_trained,best_val_accuracy,test_accuracy,precision,recall,mean_iou,notes
+C1,classification,CIFAR100,42,"Conv2D(3→32,3x3)+Pool2D | Conv2D(32→64,3x3)+Pool2D | Conv2D(64→128,3x3)+Pool2D | Flatten | Linear(2048→256) | Linear(256→num_classes)",Adam,0.001,12,0.3838,,,,,"simple CNN, no aug"
+C2,classification,CIFAR100,42,"Conv2D(3→32,3x3)+Pool2D | Conv2D(32→64,3x3)+Pool2D | Conv2D(64→128,3x3)+Pool2D | Flatten | Linear(2048→256) | Linear(256→num_classes)",Adam,0.001,12,0.4076,,,,,"simple CNN, with aug"
+C3,classification,CIFAR100,42,ResNet18 with Weights IMAGENET1K_V1,Adam,0.001,12,0.2595,,,,,resnet18 head only
+C4,classification,CIFAR100,42,ResNet18 with Weights IMAGENET1K_V1,Adam,0.001,12,0.4118,0.2403,,,,resnet18 fine-tune
+V1,detection,VOCDetection,42,fasterrcnn_resnet50_fpn_v2,Adam,0.001,8,,,0.4083,0.326,0.854,inference with score_threshold = 0.3
+V2,detection,VOCDetection,42,fasterrcnn_resnet50_fpn_v2,Adam,0.001,8,,,0.6099,0.315,0.8597,inference with score_threshold = 0.7
