@@ -52,22 +52,12 @@
 
 ## 5. Часть B: постановка задачи и режимы оценки (V1-V2)
 
-### Если выбран detection track
-
 - Модель: fasterrcnn_resnet50_fpn_v2
 - V1: `score_threshold = 0.3`
 - V2: `score_threshold = 0.7`
 - Как считался IoU: (1 / TP) * Σ(IoU_matched_pair)
 - Как считались precision / recall: Precision = TP / (TP + FP), Recall = TP / (TP + FN)
 
-### Если выбран segmentation track
-
-- Модель:
-- Что считается foreground:
-- V1: базовая постобработка
-- V2: альтернативная постобработка
-- Как считался mean IoU:
-- Считались ли дополнительные pixel-level метрики:
 
 ## 6. Результаты
 

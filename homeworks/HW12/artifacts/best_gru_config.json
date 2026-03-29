@@ -14,7 +14,7 @@
     "learning_rate": 0.0005,
     "epochs": 35,
     "scaler": "StandardScaler",
-    "best_val_mae": 5.646245956420898,
-    "test_mae": 6.722275257110596,
+    "best_val_mae": 5.6463212966918945,
+    "test_mae": 6.722484588623047,
     "seed": 42
 }
