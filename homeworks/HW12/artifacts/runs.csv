@@ -2,4 +2,4 @@ experiment_id,task,dataset,seed,split_summary,window_size,horizon,model_summary,
 B1,forecasting,S12-hw-dataset,42,70/15/15 temporal split,28,1,Naive: y[t-1],target only,StandardScaler,,,,6.4434055727554185,8.20353204909296,4.394593960122376,,,,naive baseline
 B2,forecasting,S12-hw-dataset,42,70/15/15 temporal split,28,1,Moving Average (7),target only,StandardScaler,,,,12.723717381689518,15.236325500475134,8.82877937382802,,,,MA7 baseline
 B3,forecasting,S12-hw-dataset,42,70/15/15 temporal split,28,1,Ridge(alpha=1.0),lags + calendar + rolling,StandardScaler,,,,6.206540032723189,7.671560520147172,4.137206959240456,,,,linear baseline
-R1,forecasting,S12-hw-dataset,42,70/15/15 temporal split,28,1,"GRU(hidden=64, layers=2)",target only (univariate),StandardScaler,Adam,0.0005,35,5.6463212966918945,7.282199519382032,3.8149948120117188,6.722484588623047,8.508288661778492,4.344768047332764,GRU model
+R1,forecasting,S12-hw-dataset,42,70/15/15 temporal split,28,1,"GRU(hidden=64, layers=2)",target only (univariate),StandardScaler,Adam,0.0005,35,5.646245956420898,7.282123038543522,3.8149523735046387,6.722275257110596,8.508033098035387,4.344639301300049,GRU model
