@@ -1,0 +1,32 @@
+{
+  "experiment_id": "BASE_FR50_COCO_NO_FINETUNE",
+  "model_name": "fasterrcnn_resnet50_fpn",
+  "weights": "COCO pretrained",
+  "finetuned_on_udacity": false,
+  "dataset": "Udacity Self Driving Car Dataset",
+  "val_images_used": 300,
+  "score_threshold": 0.3,
+  "iou_threshold": 0.5,
+  "metrics": {
+    "precision@0.5": 0.3562421185372005,
+    "recall@0.5": 0.5310150375939849,
+    "f1@0.5": 0.4264150943396226,
+    "tp": 1130,
+    "fp": 2042,
+    "fn": 998,
+    "map": 0.06456451863050461,
+    "map@0.5": 0.13625763356685638,
+    "map@0.75": 0.05333368852734566,
+    "mar_1": 0.05899733677506447,
+    "mar_10": 0.1274515688419342,
+    "mar_100": 0.13217750191688538
+  },
+  "coco_to_udacity_mapping": {
+    "1": 3,
+    "2": 1,
+    "3": 2,
+    "4": 1,
+    "8": 11,
+    "10": 4
+  }
+}

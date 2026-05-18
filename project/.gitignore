@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Pytest / caches
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+configs/kaggle.json
+
+# Logs
+logs/
+*.log
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Raw and processed datasets
+data/raw/
+data/processed/
+
+# Notebook outputs / generated files
+notebooks/**/*.png
+notebooks/**/*.jpg
+notebooks/**/*.jpeg
+notebooks/**/*.csv
+notebooks/**/*.json
+
+# Artifacts
+artifacts/vehicle_detection/checkpoints/
+
+# Optional large weights
+# artifacts/models/*.pt
+
+# Keep important artifacts folders
+!artifacts/models/
+!artifacts/metrics/
+
+# Compiled / binary
+*.so
+*.dll
+
+# Misc
+*.bak
+*.swp
+
+artifacts/models/*.pt

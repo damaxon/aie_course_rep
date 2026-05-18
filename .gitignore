@@ -1,70 +1,44 @@
-# ---------------------------------------------------------
-# Общие правила игнорирования для репозитория студента
-# ---------------------------------------------------------
-
-# Системные файлы ОС
-.DS_Store
-Thumbs.db
-
-# Конфигурации IDE/редакторов
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Виртуальные окружения Python
-.venv/
-venv/
-env/
-ENV/
-.conda/
-.venv*/
-
-# Кеши Python и скомпилированные файлы
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Папки и файлы сборки/дистрибуции (если вдруг появятся)
-build/
-dist/
-eggs/
-*.egg-info/
-.installed.cfg
+# Virtual environments
+.venv/
+venv/
+env/
 
-# Кеши и артефакты тестов
+# Jupyter
+.ipynb_checkpoints/
+
+# Pytest / caches
 .pytest_cache/
 .coverage
-.coverage.*
 htmlcov/
+.ruff_cache/
+.mypy_cache/
 
-# Журналы
-*.log
-logs/
+# IDE
+.vscode/
+.idea/
 
-# Кеши Jupyter Notebook
-.ipynb_checkpoints
+# OS
+.DS_Store
+Thumbs.db
 
-# Файлы окружения и конфигурации с потенциальными секретами
+# Secrets
 .env
-*.env
 .env.*
 !.env.example
 
-# Разное
-*.tmp
-*.bak
-*.old
+# Logs
+logs/
+*.log
 
-# Сырые данные
-project/data/raw/
+homeworks/HW03/eda-cli/src/s03.egg-info/
+homeworks/HW04/eda-cli/src/eda_cli.egg-info/
 
-# Конфиг с данными API сайта kaggle
-project/configs/kaggle.json
-
-report
-
-homeworks/HW14/data
-homeworks/HW13/outputs
-homeworks/HW10-11/data
 homeworks/HW08-09/data
+homeworks/HW10-11/data
+homeworks/HW13/outputs/
+homeworks/HW14/data/

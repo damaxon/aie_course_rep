@@ -1,0 +1,4 @@
+experiment_id,model_name,val_precision@0.5,val_recall@0.5,val_f1@0.5,val_map,val_map@0.5,val_map@0.75,checkpoint
+DET_FR50,fasterrcnn_resnet50_fpn,0.7039804755835287,0.832396955921949,0.7628219330401123,0.364425927400589,0.6764829754829407,0.3453042507171631,c:\Users\maxim\OneDrive\Документы\aie_course_rep\aie_course_rep\project\artifacts\vehicle_detection\checkpoints\DET_FR50.pt
+DET_FMMB,fasterrcnn_mobilenet_v3_large_fpn,0.7490388611801878,0.7363757086672619,0.7426533032650394,0.30881839990615845,0.5639784932136536,0.2929474711418152,c:\Users\maxim\OneDrive\Документы\aie_course_rep\aie_course_rep\project\artifacts\vehicle_detection\checkpoints\DET_FMMB.pt
+DET_RET50,retinanet_resnet50_fpn,0.684266890161409,0.7506001327951504,0.7159002288374796,0.23949556052684784,0.4535078704357147,0.2239333689212799,c:\Users\maxim\OneDrive\Документы\aie_course_rep\aie_course_rep\project\artifacts\vehicle_detection\checkpoints\DET_RET50.pt
