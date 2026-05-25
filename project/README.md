@@ -153,52 +153,41 @@ uv run python -m src.data.cli clean
 # Показать основные пути проекта
 uv run python -m src.cli paths
 
+# Скачать веса модели из GitHub Releases
+uv run python -m src.cli download-weights
+
 # Проверить наличие артефактов модели
 uv run python -m src.cli check-artifacts
 
 # Запустить API через CLI
 uv run python -m src.cli run-api
+
+# Выполнить inference одного изображения через CLI
+uv run python -m src.cli predict-image --image path/to/image.jpg
 ```
 
-CLI используется для воспроизводимого запуска пайплайна без ручного выполнения отдельных Python-скриптов.
+CLI используется для воспроизводимого запуска пайплайна, проверки артефактов, запуска API и выполнения inference без ручного вызова отдельных Python-скриптов.
 
 ### 4.3. Веса модели
 
 Из-за ограничения GitHub на размер файлов (`100 MB`) файл обученной модели не хранится напрямую в репозитории.
 
-Скачать веса модели можно через GitHub Releases:
-
-```text
-https://github.com/damaxon/aie_course_rep/releases/tag/v0.7
-```
-
-После скачивания файл:
-
-```text
-best_detector.pt
-```
-
-необходимо поместить в директорию:
-
-```text
-project/artifacts/models/
-```
-
-Если директория отсутствует, её можно создать командой:
+Веса модели можно автоматически скачать из GitHub Releases командой:
 
 ```bash
-cd project
-
-mkdir artifacts/models
+uv run python -m src.cli download-weights
 ```
 
-Итоговая структура:
+По умолчанию файл сохраняется в:
 
 ```text
-project/
-└── artifacts/
-    └── models/
-        └── best_detector.pt
+project/artifacts/models/best_detector.pt
+```
+
+Если файл уже существует, команда не перезаписывает его. Для принудительной перезагрузки:
+
+```bash
+uv run python -m src.cli download-weights --force
 ```
 
 Metadata финальной модели хранится в репозитории:
@@ -211,6 +200,12 @@ project/artifacts/metrics/best_detector_meta.json
 
 ```bash
 uv run python -m src.cli check-artifacts
+```
+
+Также веса модели доступны вручную через GitHub Releases:
+
+```text
+https://github.com/damaxon/aie_course_rep/releases/tag/v0.7
 ```
 
 ### 4.4. Повторное обучение модели
@@ -236,6 +231,36 @@ artifacts/runs/detection/
 ```
 
 Текущая лучшая модель не должна перезаписываться случайно. Для замены `best_detector.pt` предусмотрены дополнительные подтверждения в конфигурации обучения.
+
+Запуск обучения через CLI защищён обязательными флагами подтверждения.
+
+Проверочный запуск без подтверждений:
+
+```bash
+uv run python -m src.cli train-detector
+```
+
+Команда остановится и предупредит, что обучение не будет запущено без явного подтверждения.
+
+Запуск повторного обучения без замены текущей best-модели:
+
+```bash
+uv run python -m src.cli train-detector \
+  --confirm-retrain \
+  --confirm-long-run
+```
+
+Запуск повторного обучения с заменой текущей best-модели:
+
+```bash
+uv run python -m src.cli train-detector \
+  --confirm-retrain \
+  --confirm-long-run \
+  --promote-to-best \
+  --confirm-overwrite-best
+```
+
+По умолчанию новая модель сохраняется в run-директорию и не заменяет `artifacts/models/best_detector.pt`.
 
 Основная логика обучения включает:
 - создание dataloaders;
@@ -318,7 +343,28 @@ http://127.0.0.1:8000/docs
 
 5. Скопировать JSON-ответ из `/predict` и вместе с исходным изображением передать в `POST /visualize-detections`.
 
-### 4.7. Логи сервиса
+### 4.7 CLI inference
+
+Помимо REST API, inference можно выполнить напрямую через CLI.
+
+Пример запуска:
+
+```bash
+uv run python -m src.cli predict-image \
+  --image path/to/image.jpg \
+  --score-threshold 0.5 \
+  --output-json artifacts/predictions/result.json \
+  --output-image artifacts/visualizations/result.png
+```
+
+Команда:
+- загружает финальную модель из `artifacts/models/best_detector.pt`;
+- выполняет детекцию на одном изображении;
+- выводит JSON с результатами;
+- при необходимости сохраняет JSON;
+- при необходимости сохраняет изображение с нарисованными bounding boxes.
+
+### 4.8. Логи сервиса
 
 При запуске API автоматически создаётся директория:
 
@@ -353,7 +399,7 @@ cat logs/app.log
 logs/app.log
 ```
 
-### 4.8. Типовые сценарии запуска
+### 4.9. Типовые сценарии запуска
 
 Для полного развёртывания проекта после клонирования репозитория необходимы:
 - Kaggle API token для загрузки датасета;
@@ -361,12 +407,14 @@ logs/app.log
 
 #### Сценарий 1: запуск только inference-сервиса
 
-Если данные уже подготовлены, а веса модели скачаны из GitHub Releases:
+Если данные уже подготовлены, достаточно скачать веса модели и запустить API:
 
 ```bash
 cd project
 
 uv sync
+
+uv run python -m src.cli download-weights
 uv run python -m src.cli check-artifacts
 uv run uvicorn src.api:app --reload
 ```
@@ -383,16 +431,34 @@ uv run python -m src.data.cli download
 uv run python -m src.data.cli organize
 uv run python -m src.data.cli prepare
 
+uv run python -m src.cli download-weights
 uv run python -m src.cli check-artifacts
+
 uv run uvicorn src.api:app --reload
 ```
 
-#### Сценарий 3: проверка проекта перед сдачей
+#### Сценарий 3: CLI inference без запуска API
+
+```bash
+cd project
+
+uv sync
+
+uv run python -m src.cli download-weights
+uv run python -m src.cli predict-image \
+  --image path/to/image.jpg \
+  --score-threshold 0.5 \
+  --output-json artifacts/predictions/result.json \
+  --output-image artifacts/visualizations/result.png
+```
+
+#### Сценарий 4: проверка проекта перед сдачей
 
 ```bash
 cd project
 
 uv run pytest tests
+uv run python -m src.cli download-weights
 uv run python -m src.cli check-artifacts
 uv run uvicorn src.api:app --reload
 ```
@@ -569,7 +635,17 @@ cd project
 uv run python -m src.cli check-artifacts
 ```
 
-5. Запустить API сервис через:
+5. Показать CLI inference без запуска API:
+
+```bash
+uv run python -m src.cli predict-image \
+  --image path/to/image.jpg \
+  --score-threshold 0.5 \
+  --output-json artifacts/predictions/result.json \
+  --output-image artifacts/visualizations/result.png
+```
+
+6. Запустить API сервис через:
 
 ```bash
 cd project
@@ -577,13 +653,13 @@ cd project
 uv run uvicorn src.api:app --reload
 ```
 
-6. Продемонстрировать:
+7. Продемонстрировать:
 - `/health`
 - `/info`
 - `/predict`
 - `/visualize-detections`
 
-7. Показать файл логов после выполнения запросов:
+8. Показать файл логов после выполнения запросов:
 
 ```text
 logs/app.log
@@ -596,7 +672,7 @@ logs/app.log
 - время обработки запросов;
 - количество найденных объектов.
 
-8. Показать inference на реальном изображении и визуализацию bounding boxes.
+9. Показать inference на реальном изображении и визуализацию bounding boxes.
 
 ---
 
