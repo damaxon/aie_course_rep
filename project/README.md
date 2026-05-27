@@ -43,9 +43,11 @@
   - `raw/`;
   - `organized/`;
   - `processed/`.
-- `configs/` - конфигурационные файлы:
+- `configs/` - конфигурационные и служебные файлы:
   - `.env.example`;
-  - `kaggle.json` (локально, не хранится в репозитории).
+  - `kaggle.json` (локально, не хранится в репозитории);
+  - `docker-compose.yml` - конфигурация Docker Compose;
+  - `docker-entrypoint.sh` - entrypoint-скрипт контейнера.
 - `logs/` - автоматически создаваемая директория для логов API:
   - `app.log` - основной лог-файл сервиса.
 - `tests/` - smoke/sanity тесты проекта.
@@ -56,6 +58,8 @@
   - `vehicle_detection/` - некоторые результаты и чекпоинты экспериментов обучения моделей детекции.
 - `pyproject.toml` - зависимости и конфигурация uv-проекта.
 - `uv.lock` - lock-файл окружения.
+- `Dockerfile` - описание Docker-образа для запуска inference API.
+- `.dockerignore` - список файлов и директорий, исключаемых из Docker build context.
 
 ---
 
@@ -63,10 +67,18 @@
 
 ### 3.1. Требования
 
+Для локального запуска через `uv`:
+
 - Python `3.14`;
 - `uv`;
 - доступ к интернету для загрузки зависимостей, датасета и pretrained-весов;
 - Kaggle API token для автоматической загрузки датасета.
+
+Для запуска через Docker:
+
+- Docker Desktop;
+- Docker Compose;
+- доступ к интернету для сборки образа и загрузки весов модели.
 
 ### 3.2. Установка окружения
 
@@ -298,7 +310,7 @@ confirm_overwrite_best=True
 
 Это сделано для защиты от случайного запуска долгого обучения и случайной потери уже сохранённой лучшей модели.
 
-### 4.5. Запуск сервиса (API)
+### 4.5. Запуск сервиса (API) через uv
 
 ```bash
 cd project
@@ -318,7 +330,71 @@ Swagger UI (рекомендуемый формат работы с сервис
 http://127.0.0.1:8000/docs
 ```
 
-### 4.6. Проверка API
+### 4.5. Запуск сервиса (API) через Docker
+
+Альтернативный способ развёртывания проекта - запуск через Docker.
+В этом случае не нужно вручную создавать Python-окружение на хостовой системе: зависимости устанавливаются внутри контейнера.
+
+Docker-файлы проекта:
+
+```text
+Dockerfile
+configs/docker-compose.yml
+configs/docker-entrypoin.sh
+.dockerignore
+```
+
+Сборка и запуск контейнера выполняются из директории `project`:
+
+```bash
+docker compose -f configs/docker-compose.yml up --build
+```
+
+После запуска сервис будет доступен по адресу:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger UI (рекомендуемый формат работы с сервисом):
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+При старте контейнера entrypoint автоматически выполняет:
+
+```bash
+uv run python -m src.cli download-weights
+uv run python -m src.cli check-artifacts
+uv run uvicorn src.api:app --host 0.0.0.0 --port 8000
+```
+
+То есть контейнер:
+- проверяет наличие весов модели;
+- при необходимости скачивает `best_detector.pt` из GitHub Releases;
+- проверяет наличие model artifacts;
+- запускает FastAPI-сервис.
+
+Для остановки контейнера:
+
+```bash
+docker compose -f configs/docker-compose.yml down
+```
+
+Логи контейнера можно посмотреть командой:
+
+```bash
+docker compose -f configs/docker-compose.yml logs
+```
+
+Также логи API сохраняются в локальный файл:
+
+```text
+logs/app.log
+```
+
+### 4.7. Проверка API
 
 Основные endpoints:
 
@@ -343,7 +419,7 @@ http://127.0.0.1:8000/docs
 
 5. Скопировать JSON-ответ из `/predict` и вместе с исходным изображением передать в `POST /visualize-detections`.
 
-### 4.7 CLI inference
+### 4.8. CLI inference
 
 Помимо REST API, inference можно выполнить напрямую через CLI.
 
@@ -364,7 +440,7 @@ uv run python -m src.cli predict-image \
 - при необходимости сохраняет JSON;
 - при необходимости сохраняет изображение с нарисованными bounding boxes.
 
-### 4.8. Логи сервиса
+### 4.9. Логи сервиса
 
 При запуске API автоматически создаётся директория:
 
@@ -399,13 +475,35 @@ cat logs/app.log
 logs/app.log
 ```
 
-### 4.9. Типовые сценарии запуска
+### 4.10. Типовые сценарии запуска
 
 Для полного развёртывания проекта после клонирования репозитория необходимы:
 - Kaggle API token для загрузки датасета;
 - файл весов `best_detector.pt`, скачанный из GitHub Releases.
 
-#### Сценарий 1: запуск только inference-сервиса
+#### Сценарий 1: запуск через Docker
+
+```bash
+cd project
+
+docker compose -f configs/docker-compose.yml up --build
+```
+
+После запуска открыть:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Для остановки:
+
+```bash
+docker compose -f configs/docker-compose.yml down
+```
+
+Docker-сценарий рекомендуется для демонстрации проекта на защите, так как он изолирует окружение и снижает зависимость от локальных настроек Python.
+
+#### Сценарий 2: запуск только inference-сервиса
 
 Если данные уже подготовлены, достаточно скачать веса модели и запустить API:
 
@@ -419,7 +517,7 @@ uv run python -m src.cli check-artifacts
 uv run uvicorn src.api:app --reload
 ```
 
-#### Сценарий 2: полный запуск с подготовкой данных
+#### Сценарий 3: полный запуск с подготовкой данных
 
 ```bash
 cd project
@@ -437,7 +535,7 @@ uv run python -m src.cli check-artifacts
 uv run uvicorn src.api:app --reload
 ```
 
-#### Сценарий 3: CLI inference без запуска API
+#### Сценарий 4: CLI inference без запуска API
 
 ```bash
 cd project
@@ -452,7 +550,7 @@ uv run python -m src.cli predict-image \
   --output-image artifacts/visualizations/result.png
 ```
 
-#### Сценарий 4: проверка проекта перед сдачей
+#### Сценарий 5: проверка проекта перед сдачей
 
 ```bash
 cd project
@@ -645,12 +743,28 @@ uv run python -m src.cli predict-image \
   --output-image artifacts/visualizations/result.png
 ```
 
-6. Запустить API сервис через:
+6. Запустить API сервис одним из способов:
+
+Вариант 1 - через Docker:
+
+```bash
+cd project
+
+docker compose -f configs/docker-compose.yml up --build
+```
+
+Вариант 2 - локально через uv:
 
 ```bash
 cd project
 
 uv run uvicorn src.api:app --reload
+```
+
+После запуска открыть Swagger UI:
+
+```text
+http://127.0.0.1:8000/docs
 ```
 
 7. Продемонстрировать:
@@ -679,18 +793,23 @@ logs/app.log
 ## 9. Ограничения и дальнейшая работа
 
 В текущей версии:
-- inference выполняется только для изображений;
-- отсутствует batch/video inference;
-- реализовано базовое логирование API через стандартный модуль `logging`;
+- inference выполняется только для отдельных изображений;
+- отсутствует batch inference для обработки набора изображений одним запросом;
+- отсутствует video inference для обработки видеопотока или видеофайла;
 - в inference-сервисе используется одна финальная detection-модель;
-- повторное обучение реализовано как отдельный модуль, но не запускается автоматически из API.
+- повторное обучение модели реализовано через CLI-команду с обязательными подтверждениями, но не запускается автоматически из API;
+- реализована автоматическая загрузка весов модели из GitHub Releases;
+- реализовано базовое логирование API через стандартный модуль `logging`;
+- реализован Docker-запуск inference API через `Dockerfile` и `docker-compose.yml`.
 
 В дальнейшем проект можно расширить:
-- добавить CLI-команду для безопасного запуска повторного обучения;
-- добавить автоматическую загрузку весов модели из GitHub Releases;
 - добавить batch inference;
 - добавить video inference;
-- добавить Docker deployment.
+- добавить сохранение истории inference-запросов;
+- расширить логирование до полноценного мониторинга;
+- добавить сбор production-метрик: latency, error rate, количество запросов;
+- добавить оптимизацию скорости inference;
+- добавить дополнительные detection-модели и сравнить их качество на том же протоколе.
 
 ---
 

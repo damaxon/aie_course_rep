@@ -457,7 +457,9 @@ uv run python -m src.cli train-detector \
 - Typer;
 - uv;
 - pytest;
-- logging.
+- logging;
+- Docker;
+- Docker Compose.
 
 Проект запускается через `uv`:
 
@@ -465,6 +467,14 @@ uv run python -m src.cli train-detector \
 uv sync
 uv run uvicorn src.api:app --reload
 ```
+
+Также проект поддерживает запуск через Docker:
+
+```bash
+docker compose -f configs/docker-compose.yml up --build
+```
+
+Docker-контейнер при старте проверяет наличие весов модели, при необходимости скачивает их из GitHub Releases, проверяет артефакты и запускает FastAPI-сервис на `0.0.0.0:8000`.
 
 Более подробно запуск описан в `README.md`.
 
@@ -625,14 +635,10 @@ uv run python -m src.cli predict-image \
 
 ### 6. Запуск API
 
+Основной вариант запуска на защите:
+
 ```bash
-uv run uvicorn src.api:app --reload
-```
-
-Swagger UI:
-
-```text
-http://127.0.0.1:8000/docs
+docker compose -f configs/docker-compose.yml up --build
 ```
 
 ### 7. Проверка endpoints

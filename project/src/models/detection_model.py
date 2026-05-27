@@ -13,7 +13,8 @@ def build_detection_model(
         weights = "DEFAULT" if pretrained else None
 
         model = torchvision.models.detection.fasterrcnn_resnet50_fpn(
-            weights=weights
+            weights=weights,
+            weights_backbone=None,
         )
 
         in_features = model.roi_heads.box_predictor.cls_score.in_features
@@ -31,7 +32,8 @@ def build_detection_model(
         weights = "DEFAULT" if pretrained else None
 
         model = torchvision.models.detection.fasterrcnn_mobilenet_v3_large_fpn(
-            weights=weights
+            weights=weights,
+            weights_backbone=None,
         )
 
         in_features = model.roi_heads.box_predictor.cls_score.in_features
@@ -49,7 +51,8 @@ def build_detection_model(
         weights = "DEFAULT" if pretrained else None
 
         model = torchvision.models.detection.retinanet_resnet50_fpn(
-            weights=weights
+            weights=weights,
+            weights_backbone=None,
         )
 
         num_anchors = model.head.classification_head.num_anchors

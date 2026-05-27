@@ -19,7 +19,7 @@
 | 3  | Есть EDA и хотя бы один эксперимент с метриками | ✅ | `notebooks/01_eda.ipynb`, `notebooks/03_detection_experiments.ipynb`, `report.md` |
 | 4  | Есть baseline и улучшенная модель, есть **сравнение по метрикам** | ✅ | `notebooks/02_baseline_detection.ipynb`, `notebooks/03_detection_experiments.ipynb`, `report.md` |
 | 5  | Код не свален в один ноутбук: есть внятная структура в `src/` | ✅ | `src/data/`, `src/models/`, `src/api.py`, `src/cli.py`, `src/logger.py` |
-| 6  | Есть Dockerfile **или** понятный сценарий развёртывания без Docker | ✅ | `README.md`, `pyproject.toml`, `uv.lock`; далее будет добавлен Dockerfile |
+| 6  | Есть Dockerfile **или** понятный сценарий развёртывания без Docker | ✅ | `Dockerfile`, `configs/docker-compose.yml`, `configs/docker-entrypoint.sh`, `README.md` |
 | 7  | Есть `.env.example` и **нет** в репозитории реальных секретов/паролей | ✅ | `.env.example`, `.gitignore`, `configs/kaggle.json` не хранится в репозитории |
 | 8  | Реализованы логи/наблюдаемость (хотя бы консольные логи + `/health`) | ✅ | `src/logger.py`, `logs/app.log`, `src/api.py`, `/health`, `/info` |
 | 9  | В `report.md` **обоснован выбор финальной модели** по результатам экспериментов | ✅ | `report.md`, разделы «Экспериментальный протокол и результаты», «Выбор финальной модели» |
